@@ -15,6 +15,7 @@ def load(p):
         p = 0x309c04bcaedbb0134cca8373e439ffffffffffffffffffffffffffffffffffff
     params = {}
     filename = 'Precomputed/' + str(p) + '.py'
+    print(filename)
     try:
         with open(filename, "r") as file:
             p = Integer(literal_eval(file.readline()))
