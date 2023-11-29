@@ -18,7 +18,8 @@ def time_sign(param):
     return tot_time
 
 if __name__ == "__main__":
-    params = ['NIST', '7-block', '4-block']
+    #params = ['NIST', '7-block', '4-block']
+    params = ['NIST', '8513034219037441780170691209753296498696014329521974009944792576819199999999']
     timings = {}
     reps = 3
     for p in params:

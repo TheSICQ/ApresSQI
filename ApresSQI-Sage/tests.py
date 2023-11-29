@@ -170,8 +170,9 @@ if __name__=="__main__":
     #param = '4-block'
     #param = '7-block'
     #param = 'NIST'
-    param = 'toy'
-    param = '136319'
+    #param = 'toy'
+    #param = '136319'
+    param = '8513034219037441780170691209753296498696014329521974009944792576819199999999'
     test_KeyGen(param)
     #test_SigningAndVerif(param)
     test_SigningAndVerif(param, compressed=False)

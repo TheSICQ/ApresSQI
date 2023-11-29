@@ -204,7 +204,8 @@ def ActionMatrix(alpha, basis, ord):
 #p = Integer(21986677567972288250995905822739208616445482086236719868210978703712341458943)
 #p = Integer(22728720641309136015759539049556903787604752849407962277276342173428260798463)
 #p = Integer(507227047723007)
-p = Integer(136319)
+#p = Integer(136319)
+p = Integer(8513034219037441780170691209753296498696014329521974009944792576819199999999) #From Cryptographic Smooth Neighbours
 
 F = GF((p,2), name='z2', modulus=var('x')**2 + 1)
 sqrtm1 = F.gens()[0]
@@ -222,6 +223,12 @@ except:
         for (l,e) in factor(T):
             for ee in range(1, e+1):
                 facToExt[l**ee] = 1
+    elif p == 8513034219037441780170691209753296498696014329521974009944792576819199999999: #Cryptographic Smooth Neighbours prime
+        T = Integer(3**2 * 5**8 * 7**5 * 13**4 * 17 * 31 * 41**4 * 53 * 61 * 71**4 * 73 * 83 * 113**4 * 127 * 149 * 181**4 * 223**4 * 233 * 293 * 313 * 347 * 397 * 457**4 * 467 * 479)
+        facToExt = {}
+        for (l,e) in factor(T):
+            for ee in range(1, e+1):
+                facToExt[l**ee] = 1
     else:
         T, facToExt = choose_torsion(p, 1, (p**(1.25))*2000)
 
@@ -233,6 +240,8 @@ except:
         sec_param = 25
     if p == 136319:
         sec_param = 5
+    if p == 8513034219037441780170691209753296498696014329521974009944792576819199999999:
+        sec_param = 48 #Just for now to keep things easy
     
     f2 = min(f, 128)
     if f2 < sec_param:
