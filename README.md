@@ -1,6 +1,6 @@
 # AprèsSQI
 
-Implementations related to the SQIsign signature scheme, using extension-fields in signing.
+Implementations related to the SQIsign signature scheme, using extension-fields in signing. This is code accompanying the paper *[AprèsSQI: Extra Fast Verification for SQIsign Using Extension-Field Signing](https://eprint.iacr.org/2023/1559)*.
 
 ## ApresSQI-Sage
 The implementation of the signing and an unoptimized verification procedure is available in the folder ApresSQI-Sage. To run, see README.md in that folder.
