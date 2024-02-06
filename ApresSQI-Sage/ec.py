@@ -131,17 +131,23 @@ def TorsionBasis(E, D, xOnly = 0, seeds = None, small_ns = None, small_s = None)
     return xP, xQ, xPmQ
 
 
-def point_difference(P, Q):
+def point_difference(P, Q, x_only = False):
 	#follows code from SQIsign NIST version 1.0
 	#input: affine points P,Q
 	#		affine curve constant ProjA = [A, [1,0]]
 	#output: x-coordinate of P-Q = PmQ
 
 	#check if all inputs are affine
-    E = P.curve()
-    assert isMontgomery(E)
-    A = E.a2()
-    Px, Qx = P.xy()[0], Q.xy()[0]
+    if x_only:
+        E = P.curve
+        assert isMontgomery(E)
+        A = E.a2()
+        Px, Qx = P.X, Q.X
+    else:
+        E = P.curve()
+        assert isMontgomery(E)
+        A = E.a2()
+        Px, Qx = P.xy()[0], Q.xy()[0]
     PmQZ = Px - Qx
     t2 = Px*Qx
     t3 = t2 - 1

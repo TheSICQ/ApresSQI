@@ -2,6 +2,7 @@ from klpt import *
 from id2iso import *
 from ApresSQI import *
 from xonly import *
+from xonly_velusqrt import EllipticCurveHom_velusqrt
 import time
 
 def test_RepresentInteger(param):
@@ -155,6 +156,32 @@ def test_xonly():
     assert res.X == control.xy()[0]
     print("  > Success")
 
+def test_xSqrtVelu():
+    p = 13632396072050491391
+    F2 = GF((p,2), name='z2', modulus=var('x')**2 + 1)   
+    E = EllipticCurve(F2, [1, 0])
+    K, _ = E.gens()
+    l = 1009
+    K *= sqrt(E.order())//l
+    E, _ = Normalized(E.isogeny(K))
+
+    K, _ = E.gens()
+    l = 1009
+    K *= sqrt(E.order())//l
+
+    xK = xPoint(K.xy()[0], E)
+    phi = EllipticCurveHom_velusqrt(E, xK, l)
+
+    phi_control = E.isogeny(K)
+    phi_control = phi_control.codomain().isomorphism_to(phi.codomain()) * phi_control
+
+    P = E.random_point()
+    print(phi_control(P))
+    print(phi(P))
+    print(xPoint(P.xy()[0], E).push(phi))
+
+    print("  > Success")
+
 def all_tests(param):
     test_RepresentInteger(param)
     test_KeyGenKLPT(param)
@@ -168,14 +195,15 @@ def all_tests(param):
 
 if __name__=="__main__":
     #param = '4-block'
-    #param = '7-block'
+    param = '7-block'
     #param = 'NIST'
     #param = 'toy'
     #param = '136319'
-    param = '8513034219037441780170691209753296498696014329521974009944792576819199999999'
-    test_KeyGen(param)
-    #test_SigningAndVerif(param)
-    test_SigningAndVerif(param, compressed=False)
+    #param = '8513034219037441780170691209753296498696014329521974009944792576819199999999'
+    #test_KeyGen(param)
+    test_SigningAndVerif(param)
+    #test_SigningAndVerif(param, compressed=False)
     #test_SigningAndVerif(param, seeded=False)
     #all_tests(param)
+    #test_xSqrtVelu()
     print('All tests passed!')

@@ -23,6 +23,10 @@ class xPoint:
         assert isinstance(other, xPoint)
         return self.X == other.X and self.curve == other.curve
     
+    def on_twist(self):
+        y_sqr = self.X**3 + MontgomeryA(self.curve)*self.X**2 + self.X
+        return is_square(y_sqr)
+    
     def xDBL(self):
         if not self:
             return self
@@ -35,6 +39,9 @@ class xPoint:
         X3 = (XX - 1)**2
         return xPoint(X3/Z3, self.curve)
     
+    def eval_isomorphism_x(self, isomorphism):
+        return isomorphism.x_rational_map()(self.X)
+    
     def push(self, isogeny):
         r"""
         Given an isogeny phi (where phi is computed as a composition of isogenies
@@ -46,8 +53,20 @@ class xPoint:
 
         newX = self.X
         for isopart in isogeny.factors():
-            assert isinstance(isopart, EllipticCurveIsogeny)
-            if isopart._EllipticCurveIsogeny__algorithm == 'kohel':
+            #assert isinstance(isopart, EllipticCurveIsogeny)
+            if isopart._EllipticCurveIsogeny__algorithm == 'velu_sqrt':
+                if (isom := isopart._pre_iso):
+                    newX = isom.x_rational_map()(newX)
+                
+                newX = isopart._raw_eval(newX)
+                if not newX:
+                    verbose("Point seems to be in the kernel")
+                    return xPoint(None, isogeny.codomain())
+                
+                if (isom := isopart._post_iso):
+                    newX = isom.x_rational_map()(newX)
+
+            elif isopart._EllipticCurveIsogeny__algorithm == 'kohel':
 
                 if (isom := isopart._EllipticCurveIsogeny__pre_isomorphism):
                     newX = isom.x_rational_map()(newX)
@@ -172,6 +191,7 @@ class xPoint:
         phi = E.isogeny(h, check=False)
         _, phi = Normalized(phi)
         return phi
+        
 
 def xADD(P, Q, PmQ):
     r"""
@@ -540,8 +560,6 @@ def sqrtDeterministic(a):
         t3 = t3*c8
 
     a_sqrt = F([t0, t3])
-
-
 
     if int(t0) % 2 != 0: ## TODO: understand why this turns out this is the correct choice of squareroot
         return F([t0*c0, t3*c0]) 

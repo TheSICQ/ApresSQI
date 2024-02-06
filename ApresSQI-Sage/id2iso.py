@@ -5,6 +5,7 @@ from xonly import customTwoIsogeny, xDBLMUL
 from klpt import SpecialEichlerNorm, FindLinearCombination
 from ec import CompleteBasis, TorsionBasis
 from utilities import BiDLP
+from xonly_velusqrt import EllipticCurveHom_velusqrt
 
 #################################
 #                               #
@@ -22,9 +23,12 @@ def chain_iso(kernelPointsIn, E):
     philist = []
     while kernelPoints:
         Ri, (l,e), coeffs = kernelPoints.pop()
-        print(f'Computing isogeny of degree {l}')
         Ki = Ri.xMUL(l**(e-1))
-        phi = Ki.xISOG(Ei, l)
+        if l > 100 and Ki.X.parent().degree() == 2:
+            print("> Using sqrt_velu")
+            phi = EllipticCurveHom_velusqrt(Ei, Ki, l)
+        else:
+            phi = Ki.xISOG(Ei, l)
         Ei = phi.codomain()
         if e > 1:
             kernelPoints.append((Ri, (l, e-1), coeffs))
