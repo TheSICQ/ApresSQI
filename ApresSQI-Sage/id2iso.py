@@ -24,6 +24,7 @@ def chain_iso(kernelPointsIn, E):
     while kernelPoints:
         Ri, (l,e), coeffs = kernelPoints.pop()
         Ki = Ri.xMUL(l**(e-1))
+        print(f'Computing isogeny of degree {l} over Fp^{Ki.X.parent().degree()}')
         if l > 100 and Ki.X.parent().degree() == 2:
             print("> Using sqrt_velu")
             phi = EllipticCurveHom_velusqrt(Ei, Ki, l)
