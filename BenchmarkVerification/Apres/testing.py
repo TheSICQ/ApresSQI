@@ -47,7 +47,5 @@ def test_verif_wsnp():
 
 
 if __name__ == "__main__":
-    #test_verification()
-    #test_verification23()
     test_verif_uncompressed()
     test_verif_wsnp()

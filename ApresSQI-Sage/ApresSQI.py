@@ -411,8 +411,8 @@ class SQIsign_pubkey:
 
 class SQIsign_privkey:
     """
-    Class describing the SQIsign public key,
-    which constist of an alpha describing the
+    Class describing the SQIsign private key,
+    which constists of an alpha describing the
     secret ideals, a pushed dictionary of
     torsion bases, a point Q useful in signing,
     and a SQIsign public key
