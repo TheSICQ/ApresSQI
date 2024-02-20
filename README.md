@@ -76,6 +76,9 @@ sage example.py
 ```
 will use the `toy` parameter, signing with seeds and using compressed signatures. 
 
+#### Acknowledgements
+The code in this directory is based on the [documentation](http://sqisign.org/spec/sqisign-20230601.pdf) from the NIST submission of SQIsign. Further, it uses many ideas introduced in [Deuring for the People](https://eprint.iacr.org/2023/106), and some code found here is also taken from the [code](https://github.com/friends-of-quaternions/deuring), made by Jonathan Komada Eriksen, Lorenz Panny, Jana Sotáková and Mattia Veroni. Some other code (specifically, lattice enumeration) is also taken from the [code](https://github.com/LearningToSQI/SQISign-SageMath) accompanying the project [Learning to SQI](https://learningtosqi.github.io/), made by Maria Corte-Real Santos, Jonathan Komada Eriksen, Michael Meyer and Giacomo Pope. Finally, the implementation of sqrt_velu in xonly_velusqrt.py is from the SageMath source code, adapted to work with our custom xPoint class (doing x-only arithmetic).
+
 ### Benchmark Verification
 
 The directory `BenchmarkVerification` allows us to (re)run benchmarking found in Section 7 of the paper. It contains two subdirectories:
