@@ -37,13 +37,10 @@ The directory `ApresSQI-Sage` also contains two sub-directories:
 - `Privkeys`: contains private keys for certain primes $p$ that are loaded by SQIsign signature call in `ApresSQI.py`
 
 We give the precomputed parameters in `Precomputed` and private keys in `Privkeys` for the following primes:
-- `toy`: $2$<sup>$33$</sup>$ \ \cdot \ 3$<sup>$10$</sup> $ - 1$
-- `NIST`: $2$<sup>$75$</sup>$ \ \cdot \ 3$<sup>$36$</sup>$ \ \cdot \ 23$<sup>$2$</sup>$ \ \cdot \ 59$<sup>$2$</sup>$ \ \cdot \ 101$<sup>$2$</sup>$ \ \cdot \ 109$<sup>$2$</sup>$ \ \cdot \ 197$<sup>$2$</sup>$ \ \cdot \ 491$<sup>$2$</sup>$ \ \cdot \ 743$<sup>$2$</sup>$ \ \cdot \ 1913$<sup>$2$</sup>$  - 1$ (denoted as $p$<sub>$1973$</sub> in the accompanying paper)
-
-
-
-- `7-block`: $2$<sup>$145$</sup>$ \ \cdot \ 3$<sup>$9$</sup>$ \ \cdot \ 59$<sup>$3$</sup>$ \ \cdot \ 311$<sup>$3$</sup>$ \ \cdot \ 317$<sup>$3$</sup>$ \ \cdot \ 503$<sup>$3$</sup>$ - 1$ (denoted as $p$<sub>$7$</sub> in the accompanying paper)
-- `4-block`: $2$<sup>$242$</sup>$ \ \cdot \ 3 \cdot 67 - 1$ (denoted as $p$<sub>$4$</sub> in the accompanying paper)
+- `toy`: $2$<sup>$33$</sup>$3$<sup>$10$</sup> - 1
+- `NIST`: $2$<sup>$75$</sup>$3$<sup>$36$</sup>$23$<sup>$2$</sup>$59$<sup>$2$</sup>$101$<sup>$2$</sup>$109$<sup>$2$</sup>$197$<sup>$2$</sup>$491$<sup>$2$</sup>$743$<sup>$2$</sup>$1913$<sup>$2$</sup> - 1 (denoted as $p$<sub>$1973$</sub> in the accompanying paper)
+- `7-block`: $2$<sup>$145$</sup>$3$<sup>$9$</sup>$59$<sup>$3$</sup>$311$<sup>$3$</sup>$317$<sup>$3$</sup>$503$<sup>$3$</sup> - 1 (denoted as $p$<sub>$7$</sub> in the accompanying paper)
+- `4-block`: $2$<sup>$242$</sup>$* 3 * 67 - 1$ (denoted as $p$<sub>$4$</sub> in the accompanying paper)
 
 If other primes are found in these sub-directories, they have been requested and added for other applications (beyond AprèsSQI).
 
