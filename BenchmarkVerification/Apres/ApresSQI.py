@@ -1,3 +1,9 @@
+
+####################################################################################################################
+##################################     This file contains code relating to the    ##################################
+##################################     ApresSQI class for SQIsign verification    ##################################
+####################################################################################################################
+
 from isogenychains import *
 from strategies_sike import *
 from ec_misc import j_invariant
@@ -9,6 +15,9 @@ from hashlib import sha256
 class ApresSQI_verifier:
     '''ApresSQI class SQIsign verification'''
     def __init__(self, p, f, f2, f3):
+        """
+        Set parameters
+        """
         #D_chall = 2**f2*3**f3
         self.p = p
         self.f = f
@@ -19,7 +28,7 @@ class ApresSQI_verifier:
         assert (self.p + 1) % (2**self.f*3**self.f3) == 0
         if self.f3 > 0:
             self.strategy_f3, _ = compute_strategy(3, self.f3)
-        #cofac
+        #cofactor
         self.m = (self.p+1)//(2**self.f)
         #self.e = ceil((15/4)*log(self.p,2) + 25)
         self.e = 975 #The above is more correct, but for measurements, we assume p is always of the same size
@@ -31,6 +40,17 @@ class ApresSQI_verifier:
             self.strategy_g, _ = compute_strategy(2, self.g//2)
 
     def verify(self, msg, sigma, pk, push=True):
+        """Verification algorithm for the AprèsSQI variant of SQIsign
+
+        Args:
+            msg: message
+            sigma: signature (length of sigma will determine whether it is seeded, unseeded, or uncompressed)
+            pk: public key
+            push (bool, optional): signals whether the point Q was pushed. Defaults to True.
+
+        Returns:
+            bool: tells us whether signature is valid or not
+        """
         if len(sigma) == 3: #unseeded
             zip, r, s = sigma
             seeds = None
@@ -45,6 +65,16 @@ class ApresSQI_verifier:
         return self.decompress_and_check_chall(E_2, s, r, msg, seeds = seeds_ls, Q_push = Q)
     
     def verify_uncompressed(self, msg, sigma, pk):
+        """Verification for uncompressed singatures
+
+        Args:
+            msg: message
+            sigma: signature
+            pk: public key
+
+        Returns:
+            bool: tells us whether signature is valid or not
+        """
         gens, E_1coeff, hash_seeds, _ = sigma
         E_1 = [E_1coeff, [1,0]]
         gens = [[Kx, [1,0]] for Kx in gens]
@@ -62,6 +92,9 @@ class ApresSQI_verifier:
         return j_invariant(E_2m) == j_invariant(E_2)
     
     def decompress_resp(self, s, ProjA, seeds = None, push = True):
+        """
+            Function that decompresses response
+        """
         b, scalars = s
         assert len(scalars) == self.B
         A = ProjA
@@ -94,6 +127,9 @@ class ApresSQI_verifier:
                 return A, None
         
     def decompress_and_check_chall(self, ProjA, s, r, msg, seeds = None, Q_push = None):
+        """
+            Function that decompresses and checks challenge isogeny
+        """
         A = ProjA
         if Q_push:
             Q = Q_push
@@ -160,6 +196,9 @@ class ApresSQI_verifier:
         
 
     def hash_to_point(self, msg, ProjA, seeds = None):
+        """
+            Hash function that hashes message to a point of orde 2^{f2}*3^{f3}
+        """
         A = ProjA
         if seeds:
             P = [small_nonsquare(seeds[0]), [1, 0]]
@@ -176,6 +215,9 @@ class ApresSQI_verifier:
         return K
     
     def step(self, ProjA, b, si, count, seed = None, Q_push = None):
+        """
+            Computes step of response isogeny
+        """
         A = ProjA
         if Q_push:
             Q = Q_push

@@ -306,7 +306,7 @@ def small_mul(a, b):
 
 def xADDsmall(P, Q, PmQ):
 	"""
-	Input: projective points P, Q (with small TODO?)
+	Input: projective points P, Q 
 		   projective difference PmQ = P-Q with PmQ[1] = [1,0] (i.e., affine)
 	Output: projective coordinates of P+Q
 	"""

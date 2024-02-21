@@ -249,15 +249,6 @@ def fp2_copy(a):
 
 	return [a[0], a[1]]
 
-
-###########################################################
-# Fast square roots in Fp2 
-
-# Follows Scott's "A note on the calculation of some 
-#       functions in finite fields: Tricks of the trade"
-
-###########################################################
-
 def fp2_squareroot(a):
 	"""
 	Function to find the squareroot of an element a in Fp2
@@ -310,7 +301,7 @@ def small_square_with_minus_one_nonsquare(i):
 	return small_square_min_one_nonsquares[i]
 
 ######################################################
-# Other get-calls (this is pretty ugly but w/e)
+# Other get-calls 
 ######################################################
 
 def get_p():

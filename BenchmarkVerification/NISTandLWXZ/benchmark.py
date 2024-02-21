@@ -1,3 +1,9 @@
+
+####################################################################################################################
+##################################   This file is used to run benchmarks on NIST  ##################################
+##################################    and LWXZ variants of SQIsign verification   ##################################
+####################################################################################################################
+
 from SQIsign import Verifier
 from all_primes import all_primes
 from fp_arith import update_p, reset_counter, get_cost
@@ -7,7 +13,7 @@ from mont_xonly import ladder_3pt
 from isogenychains import four_iso_chain_nist
 
 from copy import deepcopy
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt ## WARNING: Import if using plots
 from math import ceil
 from random import randint
 import sys
@@ -20,9 +26,13 @@ def valuation(n, p):
     return res
 
 def fake_sig_gen(ver, A, variant):
+    """
+        Generates a fake signature to be verified by some variant of SQIsign verification
+        Possible variants are: 'NIST', 'LWXZ'
+    """
     assert variant in ['NIST', 'LWXZ']
     assert 2**ver.f2*3**ver.f3 >= 2**128
-    #b = randint(0,1) TODO: Fix bug when this is 1...
+    #b = randint(0,1) #TODO: Fix bug when this is 1 (though this doesn't matter for benchmarking)
     b = 0
     slist = []
     for _ in range(ceil(ver.e/ver.f)):
@@ -31,12 +41,14 @@ def fake_sig_gen(ver, A, variant):
     r = randint(0, 2**128)
     s = [0, randint(1, ver.f2)] 
     if ver.f3 > 0:
-        s.append(0) #TODO: Fix bug when this is 1... (though it shouldnt matter for benchmarking)
+        s.append(0) #TODO: Fix bug when this is 1 (though this doesn't matter for benchmarking)
         s.append(randint(1, 3**ver.f3))
     return (zip, r, s)
 
 def random_walk(ver, ProjA):
-    #performs a small random walk in the 2-isogeny graph of a certain length and outputs A' in similar form after this walk
+    """
+        Performs a small random walk in the 2-isogeny graph of a certain length and outputs A' in similar form after this walk
+    """
     P, Q, PmQ = basis_two_torsion(ProjA, ver.f2)
     s = randint(0, 2**128)
     K = ladder_3pt(P, Q, PmQ, s, ProjA)
@@ -45,6 +57,9 @@ def random_walk(ver, ProjA):
     return A 
 
 def get_averages(cost_array):
+    """
+        Given an array of costs, find the average cost. This will be used for benchmarking
+    """
     output = {}
     for f, cost in cost_array:
         if f in output.keys():
@@ -54,6 +69,9 @@ def get_averages(cost_array):
     return [(f, sum(costlist)/len(costlist)) for f, costlist in output.items()]
 
 def plot(data, variant = None):
+    """
+        Given data of costs for various 'f', returns a plot with this data
+    """
     for i, coords in enumerate(data):
         x_coords, y_coords = zip(*coords)
         if not variant:
@@ -68,6 +86,19 @@ def plot(data, variant = None):
 
 def cost_graph(variant, num_samples, primes, filename, doPlot = False):
     cost_array_samples = []
+    """For a given variant, will run verficiation for the primes in the array `primes`. 
+    It will be run `num_samples` for each prime
+    Computes the average cost for each prime and returns an array containing these costs.
+
+    Args:
+        variant: variant that is being benchmarked
+        num_samples: number of samples to run for each prime
+        primes: primes to run verification with and benchmark
+        filename: name of file that will be used to save data 
+        doPlot (bool, optional): If true, will compute the plot using the function `plot` above. Defaults to False.
+
+    Returns: an array of average costs for each prime
+    """
 
     for i, p in enumerate(primes):
         update_p(p)
@@ -106,7 +137,18 @@ def cost_graph(variant, num_samples, primes, filename, doPlot = False):
         plot([cost_array])
     return cost_array
 
-def benchmark_variant(v, num_samples, plot = False, specific = False):
+def benchmark_variant(variant, num_samples, plot = False, specific = False):
+    """Runs benchmarking for a given variant of SQIsign verification
+
+    Args:
+        variant: variant of SQIsign verification to be benchmarked
+        num_samples: number of times to run verification for each prime
+        plot (bool, optional): If true, returns the plot. Defaults to False.
+        specific (bool, optional): If true, running the benchmarks on a specific list of primes. 
+                                   Otherwise, it runs the benchmarks on the primes in all_primes.py. Defaults to False.
+
+    Returns: an array of average costs for each prime
+    """
     primes = all_primes
     if specific:
         primes = SpecificPrimes
@@ -131,7 +173,7 @@ if __name__ == "__main__":
     specific = False
     if len(sys.argv) > 3:
         specific = True
-        print("running for specific primes!")
+        print("Running for specific primes!")
 
     logging = True
 
@@ -143,6 +185,6 @@ if __name__ == "__main__":
         data = []
         for variant in Variants:
             data.append(benchmark_variant(variant, num_samples, plot = False, specific = specific))
-        plot(data)
+        # plot(data)
     else:
-        benchmark_variant(variant, num_samples, plot = True, specific = specific)
+        benchmark_variant(variant, num_samples, plot = False, specific = specific)

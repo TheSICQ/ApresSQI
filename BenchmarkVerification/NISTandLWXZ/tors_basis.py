@@ -176,7 +176,6 @@ def basis_two_torsion_SIKE(ProjA, e):
 
 def basis_lam_torsion_APRES(ProjA, lam, f2):
 	"""
-	TODO: whats lam torsion
 	Function that outputs a basis of the 2^e-torsion on curve with constant A
 	As done for ApresSQI
 
@@ -1032,7 +1031,7 @@ def point_difference(P, Q, ProjA):
 
 	#check if all inputs are affine
 	if ProjA[1] != [1,0] or P[1] != [1,0] or Q[1] != [1,0]:
-		print_error("input to point_difference must be affine!")
+		print_error("Input to point_difference must be affine!")
 
 	PmQZ = fp2_sub(P[0], Q[0])
 	t2 = fp2_mul(P[0], Q[0])
@@ -1097,10 +1096,11 @@ def sample_initial_Q(A, m, f2):
     return Q"""
 
 def sample_improved_Q(A):
-    #given affine A mont coeff
-    #samples points from Fp until it has 2^f torsion
-    #this implies it must be over (0,0)
-    #returns the point with order 2^f
+    """
+		Given affine Montgomery coefficient A, samples points from Fp until it has order 2^f
+		This implies it must be over (0,0)
+		Returns a point with order 2^f
+	"""
 
     assert A[1] == [1,0]
     alpha = get_alpha(A)
@@ -1122,10 +1122,11 @@ def sample_improved_Q(A):
     return Q
 
 def sample_improved_Q_plus_plus(A):
-    #given affine A mont coeff
-    #uses that alpha must be square
-    #hence, given n in Fp2 that is square such that n-1 is nonsquare
-    #x = n*alpha will be square, but x - alpha = (n-1)*alpha is nonsquare
+    """
+		As above but now we use the fact that alpha must be square
+  		Hence, given n in Fp2 that is square such that n-1 is nonsquare
+    	x = n*alpha will be square, but x - alpha = (n-1)*alpha is nonsquare
+	"""
 
     assert A[1] == [1,0]
     alpha = get_alpha(A)

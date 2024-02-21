@@ -1,3 +1,9 @@
+
+####################################################################################################################
+##################################    This file contains code relating to the     ##################################
+##################################  NIST and LWXZ class for SQIsign verification  ##################################
+####################################################################################################################
+
 from isogenychains import *
 from strategies_sike import *
 
@@ -5,12 +11,13 @@ from math import ceil
 from copy import deepcopy
 from hashlib import sha256
 
-# change to slow Fp2 squareroots
 
 class Verifier:
     '''normal NIST class (or LWXZ) SQIsign verification'''
     def __init__(self, p, f, f2, f3, version = 'NIST'):
-        #Set parameters
+        """
+        Set parameters
+        """
         self.p = p
         self.f = f
         self.strategy_f, _ = compute_strategy(2, self.f//2-1)
@@ -20,7 +27,7 @@ class Verifier:
         assert (self.p + 1) % (2**self.f*3**self.f3) == 0
         if self.f3 > 0:
             self.strategy_f3, _ = compute_strategy(3, self.f3)
-        #cofac
+        #cofactor
         self.m = (self.p+1)//(2**self.f)
         #self.e = ceil((15/4)*log(self.p,2) + 25)
         self.e = 975 #The above is more correct, but for measurements, we assume p is always of the same size
@@ -28,19 +35,32 @@ class Verifier:
         self.B = ceil(self.e/self.f)
         #for last block, g = length last block.
         self.g = self.e % self.f
-        if self.g > 1: #This is fucked if g == 1, ....
+        if self.g > 1: 
             self.strategy_g, _ = compute_strategy(2, self.g//2-1)
 
         assert version in ['NIST', 'LWXZ'], "variant is wrong mate (Use other folder for Apres-variants)"
         self.ver = version
 
     def verify(self, msg, sigma, pk):
+        """Verification algorithm for the AprèsSQI variant of SQIsign
+
+        Args:
+            msg: message
+            sigma: signature
+            pk: public key
+
+        Returns:
+            bool: tells us whether signature is valid or not
+        """
         zippy, r, s = sigma
         E2, Q = self.decompress_resp(zippy, pk)
         #print(f'E_2 = {E2}')
         return self.decompress_and_check_chall(E2, s, Q, r, msg)
 
     def hash_to_point(self, msg, ProjA):
+        """
+            Hash function that hashes message to a point of orde 2^{f2}*3^{f3}
+        """
         P, Q, PmQ = basis_chal_torsion(ProjA, self.f2, self.f3)
         H = sha256()
         H.update(bytes(msg, "utf-8"))
@@ -48,6 +68,9 @@ class Verifier:
         return ladder_3pt(P, Q, PmQ, s, ProjA)
 
     def decompress_resp(self, s, ProjA):
+        """
+            Function that decompresses response
+        """
         P, Q, PmQ = basis_two_torsion(ProjA, self.f)
         b, scalars = s
         assert len(scalars) == self.B
@@ -68,7 +91,6 @@ class Verifier:
                     ProjA, Qlist = four_iso_chain_nist(K, [Q], ProjA, self.g, self.strategy_g)
                 elif self.g == 0:
                     K = xDBLe(K, ProjA, self.f - self.g)
-                    # Just forget about the isogeny computation for now
                 else: 
                     ProjA, Qlist = four_iso_chain_nist(K, [Q], ProjA, self.f, self.strategy_f)
 
@@ -108,6 +130,9 @@ class Verifier:
 
 
     def decompress_and_check_chall(self, ProjA, s, Q_cyc, r, msg):
+        """
+            Function that decompresses and checks challenge isogeny
+        """
         #P, Q, PmQ = basis_chal_torsion(ProjA, min(self.lam, self.f2), self.f3)
         # When chal is just a 2-power isogeny
         if len(s) == 2:
@@ -125,7 +150,7 @@ class Verifier:
 
             if proj_point_equal(xDBLe(K, ProjA, self.f2 - 1), xDBLe(Q_cyc, ProjA, self.f2-1)):
                 # print("Not cyclic!!")
-                # return False          we still continue to get a better cost image, doesnt matter much for benchmarking
+                # return False    # we still continue to get a better cost image, doesnt matter much for benchmarking
                 pass
 
             ProjA, Qlist = four_iso_chain_nist(K, [Q], ProjA, self.f2, self.strategy_f2)
@@ -143,7 +168,7 @@ class Verifier:
             K2 = ladder_3pt(P2, Q2, P2mQ2, s1, ProjA)
             if proj_point_equal(xDBLe(K2, ProjA, self.f2-1), xDBLe(Q_cyc, ProjA, self.f2-1)):
                 #print("Not cyclic!!")
-                # return False          we still continue to get a better cost image
+                # return False        #  we still continue to get a better cost image
                 pass
             if b2:
                 temp = P3

@@ -1,3 +1,10 @@
+
+####################################################################################################################
+############################### This file contains code relating to the SQIsign class ##############################
+###############################     using multiple field extensions when signing.     ##############################
+####################################################################################################################
+
+
 from klpt import *
 from id2iso import *
 from param_loader import load, AlternativeOrder
@@ -79,7 +86,6 @@ class SQIsign:
         I_secret = self.O0*alpha_sec.conjugate() + self.O0*D_secret
 
         #<<<<---- Commitment --->>>>>
-        #TODO: The commitment ideal is not correctly generated, figure how it should be (specs are completely wrong...)
         gamma = FullRepresentInteger(self.O0, self.D_com * 2**ceil(log(self.p, 2)))
         #a, b = [randint(1, self.D_com) for _ in range(2)]
         #I_com = self.O0*(a + b*theta) + self.O0*self.D_com
@@ -113,7 +119,7 @@ class SQIsign:
             # Output ideal J
             alpha = IdealEquivalence(I_secret, J_secret)
             J = (alpha**(-1))*J*alpha
-            # Only temporary, should not be necessary to enforce (actually, enforcing this leaks one secret bit lol):
+            # Only temporary, should not be necessary to enforce
             if MakeCyclic(J_secret*J) != J_secret*J:
                 continue
             break

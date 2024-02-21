@@ -1,14 +1,21 @@
+
+###############################################################################################################
+##################       This file contain functions relation to quaternion arithmetic       ##################
+###############################################################################################################
+
+
 from sage.all import *
 import fpylll
-from fpylll import IntegerMatrix, CVP
+from fpylll import IntegerMatrix, CVPd
 from fpylll.fplll.gso import MatGSO
 
 
-###############################################
-#                                             #
-# Enumerate close vectors, from LearningToSQI #
-#                                             #
-###############################################
+#####################################################
+#                                                   #
+#    Enumerate close vectors, from LearningToSQI    #
+# https://github.com/LearningToSQI/SQISign-SageMath #
+#                                                   #
+#####################################################
 
 def solve_closest_vector_problem(lattice_basis, target):
     """
@@ -162,7 +169,7 @@ def ReducedBasis(I):
 def RandomEquivalentPrimeIdeal(I):
     p = I.quaternion_algebra().ramified_primes()[0]
     reduced_basis = ReducedBasis(I)
-    bound = p**(0.5)*100 #100 is a bit arbitrary here...
+    bound = p**(0.5)*100 #100 is a bit arbitrary here
     for _ in range(1000):
         coeffs = [randint(-10, 10) for _ in range(4)]
         delta = sum([c*beta for c, beta in zip(coeffs, reduced_basis)])

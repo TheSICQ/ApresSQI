@@ -1,3 +1,9 @@
+
+#########################################################################################################################
+##########################   This file contains functions used to perform ideal to isogeny      #########################
+##########################            translations via the Deuring correspondence.              #########################
+#########################################################################################################################
+
 from sage.all import *
 from sage.schemes.elliptic_curves.hom_composite import EllipticCurveHom_composite
 from quaternion import IdealGenerator, QuaternionOrderBasis, InverseIdeal, pullback
@@ -144,7 +150,7 @@ def PushBasis(phi, FacToBasis):
         PushedBasis = [R.push(phi) for R in FacToBasis[key]]
         PushedFacToBasis[key] = PushedBasis
 
-        #### test
+        
         l,e = factor(key)[0]
         P, Q, PmQ = PushedBasis
         assert P.xMUL(l**(e-1))
@@ -175,7 +181,6 @@ def IdealToIsogenyEichler(O0, O0_alt, I, J, pushedFacToBasis, facToAction, Q, f,
     first = False
     if J.norm() == 1:
         K = IdealToIsogenyGens(O0, Ii, pushedFacToBasis, facToAction)
-        # Kinda dirty right now but oh well
         K = E0.lift_x(K[0][0].X)
         phi_I = customTwoIsogeny(K, f)
         Ji = Ii

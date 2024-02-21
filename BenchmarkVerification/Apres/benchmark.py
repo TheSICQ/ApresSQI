@@ -1,3 +1,10 @@
+
+####################################################################################################################
+##################################      This file is used to run benchmarks       ##################################
+##################################  on AprèsSQI variants of SQIsign verification  ##################################
+####################################################################################################################
+
+
 from ApresSQI import ApresSQI_verifier
 from all_primes import all_primes
 from fp_arith import update_p, reset_counter, get_cost
@@ -7,7 +14,7 @@ from mont_xonly import ladder_3pt, xMULc, xMULaffs, xDBLe, xTPLe
 from isogenychains import four_iso_chain_opt, three_iso_chain_strategy
 
 from copy import deepcopy
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt ## WARNING: Import if using plots
 from math import ceil
 from random import randint
 import sys
@@ -21,6 +28,10 @@ def valuation(n, p):
     return res
 
 def fake_sig_gen(verifier, A, variant, push = False):
+    """
+        Generates a fake signature to be verified by some variant of SQIsign verification
+        Possible variants are: 'NIST', 'LWXZ', 'APRESnswp', 'APRESnsnp','APRESwsnp', 'APRESwswp','uncompressed'
+    """
     if variant in ['NIST', 'LWXZ', 'APRESnswp', 'APRESnsnp']:
         return gen_fake_no_seed(verifier)
     elif variant in ['APRESwsnp', 'APRESwswp']:
@@ -28,11 +39,14 @@ def fake_sig_gen(verifier, A, variant, push = False):
     elif variant == 'uncompressed':
         return gen_fake_uncompressed(verifier, A)
     else:
-        assert False, "variant is wrong mate"
+        assert False, "variant is wrong or not implemented"
 
 def gen_fake_no_seed(ver):
+    """
+        Generates a fake compressed signature to be verified by some variant of SQIsign verification that uses no seeds
+    """
     assert 2**ver.f2*3**ver.f3 >= 2**128
-    #b = randint(0,1) TODO: Fix bug when this is 1...
+    #b = randint(0,1) TODO: Fix bug when this is 1 (though this doesn't matter for benchmarking)
     b = 0
     slist = []
     for _ in range(ceil(ver.e/ver.f)):
@@ -41,15 +55,21 @@ def gen_fake_no_seed(ver):
     r = randint(0, 2**128)
     s = [0, randint(1, ver.f2)] 
     if ver.f3 > 0:
-        s.append(0) #TODO: Fix bug when this is 1... (though it shouldnt matter for benchmarking)
+        s.append(0) #TODO: Fix bug when this is 1  (though it doesn't matter for benchmarking)
         s.append(randint(1, 3**ver.f3))
     return (zip, r, s)
 
 def gen_fake_with_seed(ver, A, push = False):
+    """
+        Generates a fake c signature to be verified by some variant of SQIsign verification that uses seeds
+    """
     zip, r, s = gen_fake_no_seed(ver)
     return get_seeds(ver, zip, r, s, A, push = push)
 
 def gen_fake_uncompressed(ver, ProjA):
+    """
+        Generates a fake uncompressed signature to be verified
+    """
     zip, r, s = gen_fake_no_seed(ver)
     b, scalars = zip
     gens = []
@@ -89,7 +109,9 @@ def gen_fake_uncompressed(ver, ProjA):
 
 
 def random_walk(ver, ProjA):
-    #performs a small random walk in the 2-isogeny graph of a certain length and outputs A' in similar form after this walk
+    """
+        Performs a small random walk in the 2-isogeny graph of a certain length and outputs A' in similar form after this walk
+    """
     P, Q, PmQ = basis_two_torsion(ProjA, ver.f2)
     s = randint(0, 2**128)
     K = ladder_3pt(P, Q, PmQ, s, ProjA)
@@ -98,6 +120,9 @@ def random_walk(ver, ProjA):
     return A
 
 def get_seeds(ver, zip, r, s, ProjA, push = False):
+    """
+        Computes the seeds needed for seeded version of verification
+    """
     starting_A = ProjA
     if push:
         seeds = [0 for _ in range(ver.B + 1)]
@@ -191,6 +216,9 @@ def get_seeds(ver, zip, r, s, ProjA, push = False):
     return zip, r, s, seeds, seeds_ls
 
 def get_averages(cost_array):
+    """
+        Given an array of costs, find the average cost. This will be used for benchmarking
+    """
     output = {}
     for f, cost in cost_array:
         if f in output.keys():
@@ -200,6 +228,9 @@ def get_averages(cost_array):
     return [(f, sum(costlist)/len(costlist)) for f, costlist in output.items()]
 
 def plot(data, variant = None):
+    """
+        Given data of costs for various 'f', returns a plot with this data
+    """
     for i, coords in enumerate(data):
         x_coords, y_coords = zip(*coords)
         if not variant:
@@ -213,6 +244,19 @@ def plot(data, variant = None):
     plt.show()
 
 def cost_graph(variant, num_samples, primes, filename, doPlot = False):
+    """For a given variant, will run verficiation for the primes in the array `primes`. 
+    It will be run `num_samples` for each prime
+    Computes the average cost for each prime and returns an array containing these costs.
+
+    Args:
+        variant: variant that is being benchmarked
+        num_samples: number of samples to run for each prime
+        primes: primes to run verification with and benchmark
+        filename: name of file that will be used to save data 
+        doPlot (bool, optional): If true, will compute the plot using the function `plot` above. Defaults to False.
+
+    Returns: an array of average costs for each prime
+    """
     cost_array_samples = []
 
     ApresVariants = ['APRESwsnp', 'APRESwswp', 'APRESnswp', 'APRESnsnp', 'uncompressed']
@@ -228,7 +272,7 @@ def cost_graph(variant, num_samples, primes, filename, doPlot = False):
             f3 = 0
 
         if f3 == 1 and variant == 'APRESwswp':
-            continue #TODO fix this bug
+            continue #TODO 
 
         print(f'prime {p} with 2-torsion 2^{f}; D_chall = 2^{f2}*3^{f3}')
         assert((p+1) % (2**f2 * 3**f3) == 0)
@@ -243,7 +287,7 @@ def cost_graph(variant, num_samples, primes, filename, doPlot = False):
             else:
                 push = False
         else:
-            assert False, "variant is wrong mate"
+            assert False, "variant is wrong or not implemented"
 
         for _ in range(num_samples):
             #generate signature
@@ -271,7 +315,18 @@ def cost_graph(variant, num_samples, primes, filename, doPlot = False):
         plot([cost_array])
     return cost_array
 
-def benchmark_variant(v, num_samples, plot = False, specific = False):
+def benchmark_variant(variant, num_samples, plot = False, specific = False):
+    """Runs benchmarking for a given variant of SQIsign verification
+
+    Args:
+        variant: variant of SQIsign verification to be benchmarked
+        num_samples: number of times to run verification for each prime
+        plot (bool, optional): If true, returns the plot. Defaults to False.
+        specific (bool, optional): If true, running the benchmarks on a specific list of primes. 
+                                   Otherwise, it runs the benchmarks on the primes in all_primes.py. Defaults to False.
+
+    Returns: an array of average costs for each prime
+    """
     primes = all_primes
     if specific:
         primes = SpecificPrimes
@@ -282,8 +337,8 @@ def benchmark_variant(v, num_samples, plot = False, specific = False):
         file = f'results_version_{variant}_samples_{num_samples}.txt'
     return cost_graph(variant, num_samples, primes, file, doPlot = plot)
 
-ApresVariants = ['APRESwswp', 'APRESwsnp', 'APRESnswp', 'APRESnsnp', 'uncompressed']
 
+ApresVariants = ['APRESwswp', 'APRESwsnp', 'APRESnswp', 'APRESnsnp', 'uncompressed']
 
 SpecificPrimes = [23920667128620486487914848107166358953830561597426178123910317653495243603967, 21986677567972288250995905822739208616445482086236719868210978703712341458943, 22728720641309136015759539049556903787604752849407962277276342173428260798463]
 
@@ -299,7 +354,7 @@ if __name__ == "__main__":
     specific = False
     if len(sys.argv) > 3:
         specific = True
-        print("running for specific primes!")
+        print("Running for specific primes!")
 
     logging = True
 
@@ -311,6 +366,6 @@ if __name__ == "__main__":
         data = []
         for variant in ApresVariants:
             data.append(benchmark_variant(variant, num_samples, plot = False, specific = specific))
-        plot(data)
+        # plot(data)
     else:
-        benchmark_variant(variant, num_samples, plot = True, specific = specific)
+        benchmark_variant(variant, num_samples, plot = False, specific = specific)

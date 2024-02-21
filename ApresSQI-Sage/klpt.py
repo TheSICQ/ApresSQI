@@ -1,3 +1,10 @@
+
+######################################################################################################################
+###################################### This file contains functions relating to ######################################
+######################################    the KLPT algorithm  (and variants)    ######################################     
+######################################################################################################################
+
+
 from sage.all import *
 from quaternion import IdealEquivalence, generate_close_vectors, MakePrimitive, RandomEquivalentPrimeIdeal, IdealGenerator, QuaternionOrderBasis, pullback, ConnectingIdeal, IsomorphismGamma, EvalIsomorphism
 
@@ -167,7 +174,7 @@ def KeyGenKLPT(O0, I, f):
     assert N_I % 4 == 3
     Z_N = Integers(N_I)
     low_k = ceil(log(p,2) - log(N_I, 2) + 1)
-    log_output_norm = ceil((3*log(p,2)+15)/f)*f #The +15 is guesstimated...
+    log_output_norm = ceil((3*log(p,2)+15)/f)*f #The +15 is guesstimated
     for k in range(low_k, low_k+10):
         N_gamma = ZZ(2)**(k)
         N_mu = ZZ(2)**ZZ(log_output_norm - k)

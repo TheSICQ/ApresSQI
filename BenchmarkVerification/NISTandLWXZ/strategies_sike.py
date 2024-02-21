@@ -1,5 +1,7 @@
-#code from SIBC;
-#implements the algorithm from the SIKE spec
+####################################################################################################################
+################        This file contains functions to compute optimal strategies for isogenies      ##############
+################           Code taken from SIBC,  implements the algorithm from the SIKE spec         ##############
+####################################################################################################################
 
 
 def compute_strategy(ell, n):

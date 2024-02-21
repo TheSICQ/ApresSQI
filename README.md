@@ -3,14 +3,14 @@
 This repository contains the code related to the SQIsign signature scheme, using extension-fields in signing. This is code accompanying the paper *[AprèsSQI: Extra Fast Verification for SQIsign Using Extension-Field Signing](https://eprint.iacr.org/2023/1559)* by Maria Corte-Real Santos, Jonathan Komada Eriksen, Michael Meyer and Krijn Reijnders.
 
 All code in this repository was written in `Python` and [`SageMath`](https://www.sagemath.org/), and is made publically available under the MIT licence. The dependencies are:
-- Python 3.11.1
+- Python 3.11.1 (with matplotlib)
 - SageMath version 10.1
 
 ## Contents
 
 This repository contains two main directories:
-- `ApresSQI-Sage`: this contains the implementation of the signing (using extension fields) and an unoptimized verification procedure. 
-- `BenchmarkVerification`: this contains the code used for benchmarking verification. 
+- `ApresSQI-Sage`: this contains the implementation of the signing (using extension fields) and an unoptimized verification procedure. The code in this directory is written in `SageMath` and `python`.
+- `BenchmarkVerification`: this contains the code used for benchmarking verification. The code in this directory is written in `python`.
 
 We now describe the files in each of these directories and how to run their contents. 
 
@@ -21,7 +21,10 @@ The directory `ApresSQI-Sage` provides a proof of concept implementation of the 
 
 The files contained in the main directory are as follows:
 - `ApresSQI.py`: contains a class for the SQIsign digital signature scheme, using multiple field extensions when signing, as well as classes for the SQIsign public and private keys. 
-- `benchmark.py`: this file can be run to time signing and (re)obtain the benchmarks given in Table 1 of the accompanying paper. 
+- `benchmark.py`: this file can be run to time signing and (re)obtain the benchmarks given in Table 1 of the accompanying paper. Simply run 
+```bash
+sage benchmark.py
+```
 - `ec.py`: contains algorithms involving elliptic curves and their arithmetic
 - `example.py`: this file contains an example that can be run as per the instructions below. 
 - `id2iso.py`: contains functions used to perform ideal to isogeny translations via the Deuring correspondence. 
@@ -101,7 +104,6 @@ The files in the `Apres` sub-directory are as follows:
 - `testing.py`: this file can be used for testing purposes
 - `tors_basis.py`: contains functions to compute the torsion basis.
 
-
 To benchmark ApresSQI variants of SQIsign go into the sub-directory `Apres` and run
 
 ```bash
@@ -113,11 +115,21 @@ where
 See Appendix C.1 of the accompanying paper for more details on the AprèsSQI variants.
 - `N` denotes the number of runs per prime.
 
+**NOTE:** Throughout, by `python` we mean `python3` if your terminal requires this (e.g., some MacOS versions may require this.) Furthermore, if you want to output plots, uncomment the line `import matplotlib.pyplot as plt`.
+
+If you want to run the benchmarks for a specific prime, add the prime to the array `SpecificPrimes` on line 343, and then run 
+```bash
+python benchmark.py version N True
+```
+where `version` and `N` as above. 
+
 #### NIST and LWXZ directory
 
 The files contained in this directory have identical descriptions barring the following differences:
 - `benchmark.py`: this is the main file used to run benchmarks for the NIST and LWXZ variants of SQIsign verification. We detail how to use this to run benchmarks below.
 - `fp_arith.py`: the same as above except does not use accelerated square-root computations.
+- `SQIsign.py`: this replaces the `ApresSQI.py` above, and contains the class for SQIsign verification used in NIST (and LWXZ).
+
 
 To benchmark NIST and LWXZ variants of SQIsign go into the sub-directory `NISTandLWXZ` and run
 
@@ -128,6 +140,12 @@ python benchmark.py version N
 where 
 - `version`  = `NIST` (SQIsign as per the [NIST submission](https://sqisign.org/)), `LWXZ` (SQIsign as per [Lin, Wang, Xu and Zhao](https://eprint.iacr.org/2023/753)), or `All` (runs all variants available).
 - `N` denotes the number of runs per prime.
+
+If you want to run the benchmarks for a specific prime, add the prime to the array `SpecificPrimes` on line 162, and then run 
+```bash
+python benchmark.py version N True
+```
+where `version` and `N` as above. 
 
 #### Example usage
 

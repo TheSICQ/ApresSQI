@@ -1,5 +1,8 @@
-#code from SIBC;
-#implements the algorithm from the SIKE spec
+
+####################################################################################################################
+################        This file contains functions to compute optimal strategies for isogenies      ##############
+################           Code taken from SIBC,  implements the algorithm from the SIKE spec         ##############
+####################################################################################################################
 
 
 def compute_strategy(ell, n):
@@ -7,14 +10,14 @@ def compute_strategy(ell, n):
     assert(ell == 2 or ell ==3)
 
     if ell == 2:
-        p = 5633    #cost for 2 doublings         
-        q = 5461   #cost for 4-isogeny evaluation
+        p = 5633   # cost for 2 doublings         
+        q = 5461   # cost for 4-isogeny evaluation
         if n == 0: # edge case, will be handled by odd isogeny
             return [], 0
 
     if ell == 3:
-        p = 5322    #cost for tripling        
-        q = 5282   #cost for 3-isogeny evaluation
+        p = 5322   # cost for tripling        
+        q = 5282   # cost for 3-isogeny evaluation
 
     S = {1:[]}
     C = {1:0 }

@@ -1,11 +1,12 @@
-from ec_misc import *
-from fp_arith import get_p, get_constants
-from random import randint
 
 ####################################################################################################################
 ##################################          This file contains functions to       ##################################
 ##################################             compute the torsion basis          ##################################
 ####################################################################################################################
+
+from ec_misc import *
+from fp_arith import get_p, get_constants
+from random import randint
 
 
 ################################################
@@ -27,7 +28,7 @@ def get_alpha(A):
 	alpha = fp2_sub(alpha, [4,0])
 	alpha = fp2_squareroot(alpha)
 	alpha = fp2_add(alpha, fp2_neg(A[0]))
-	alpha = fp2_mul(alpha, [inv2, 0])       #can be better
+	alpha = fp2_mul(alpha, [inv2, 0])       
 	return alpha
 
 def has_full_two_over_fp(Q, A, alpha):
@@ -178,7 +179,6 @@ def basis_two_torsion_SIKE(ProjA, e):
 
 def basis_lam_torsion_APRES(ProjA, lam, f2):
 	"""
-	TODO: whats lam torsion
 	Function that outputs a basis of the 2^e-torsion on curve with constant A
 	As done for ApresSQI
 
@@ -204,7 +204,7 @@ def basis_lam_torsion_APRES(ProjA, lam, f2):
 		m = (p+1)//(2**f2)
 		P = xMULc([x, [1, 0]], m, ProjA)
 
-		#then check amount of torsion p has, should always be enough (but unfortunate we have to check, try tricks)
+		#then check amount of torsion p has, should always be enough
 		tor_p = 1
 		P2 = xDBLaff(P, ProjA)
 		prev_P = [P, P2]
@@ -213,10 +213,10 @@ def basis_lam_torsion_APRES(ProjA, lam, f2):
 			P2 = xDBLaff(P2, ProjA)
 			prev_P.append(P2)
 
-		if tor_p < lam:		#this almost never happens
+		if tor_p < lam:	#this almost never happens
 			continue
 
-		P = prev_P[tor_p - lam]			#this can be more elegant
+		P = prev_P[tor_p - lam]	#this can be more elegant
 		break
 
 	#find second point
@@ -591,7 +591,7 @@ def complete_basis_chall_torsion_seed_get_plus(ProjA, e2, e3):
 		if not fp2_issquare(montgomery_rhs(P[0], ProjA[0])):
 			continue
 
-				#remove other torsion
+		#remove other torsion
 		P1 = xMUL(P, m, ProjA)
 
 		#check for 2 and 3-torsion
@@ -615,7 +615,6 @@ def complete_basis_chall_torsion_seed_get_plus(ProjA, e2, e3):
 			continue
 
 		#basis is valid
-
 		break
 
 	return P, Q, [i, j]
@@ -704,7 +703,7 @@ def basis_chall_torsion_apres(ProjA, e2, e3):
 		if not fp2_issquare(montgomery_rhs(P[0], ProjA[0])):
 			continue
 
-				#remove other torsion
+		#remove other torsion
 		P = xMUL(P, m, ProjA)
 
 		#check for 2 and 3-torsion
@@ -1034,7 +1033,7 @@ def point_difference(P, Q, ProjA):
 
 	#check if all inputs are affine
 	if ProjA[1] != [1,0] or P[1] != [1,0] or Q[1] != [1,0]:
-		print_error("input to point_difference must be affine!")
+		print_error("Input to point_difference must be affine!")
 
 	PmQZ = fp2_sub(P[0], Q[0])
 	t2 = fp2_mul(P[0], Q[0])
@@ -1050,7 +1049,7 @@ def point_difference(P, Q, ProjA):
 	t1 = fp2_add(t1, t2)
 	t2 = fp2_sqr(t1)
 	t0 = fp2_sub(t2, t0)
-	assert fp2_issquare(t0)		#TODO: is this required or can we save it?
+	assert fp2_issquare(t0)		
 	t0 = fp2_squareroot(t0)
 	PmQX = fp2_add(t0, t1)
 
@@ -1099,35 +1098,37 @@ def sample_initial_Q(A, m, f2):
     return Q"""
 
 def sample_improved_Q(A):
-    #given affine A mont coeff
-    #samples points from Fp until it has 2^f torsion
-    #this implies it must be over (0,0)
-    #returns the point with order 2^f
+	"""
+		Given affine Montgomery coefficient A, samples points from Fp until it has order 2^f
+		This implies it must be over (0,0)
+		Returns a point with order 2^f
+	"""
 
-    assert A[1] == [1,0]
-    alpha = get_alpha(A)
+	assert A[1] == [1,0]
+	alpha = get_alpha(A)
 
-    i = 1
+	i = 1
 
-    while True:
-        i += 1
-        Q = [[i,0],[1,0]]
+	while True:
+		i += 1
+		Q = [[i,0],[1,0]]
 
-        if not fp2_issquare(montgomery_rhs(Q[0], A[0])):
-            continue
+		if not fp2_issquare(montgomery_rhs(Q[0], A[0])):
+			continue
 
-        if not has_full_two_over_fp(Q, A, alpha):
-            continue
+		if not has_full_two_over_fp(Q, A, alpha):
+			continue
 
-        break
+		break
 
-    return Q
+	return Q
 
 def sample_improved_Q_plus_plus(A):
-    #given affine A mont coeff
-    #uses that alpha must be square
-    #hence, given n in Fp2 that is square such that n-1 is nonsquare
-    #x = n*alpha will be square, but x - alpha = (n-1)*alpha is nonsquare
+    """
+		As above but now we use the fact that alpha must be square
+  		Hence, given n in Fp2 that is square such that n-1 is nonsquare
+    	x = n*alpha will be square, but x - alpha = (n-1)*alpha is nonsquare
+	"""
 
     assert A[1] == [1,0]
     alpha = get_alpha(A)

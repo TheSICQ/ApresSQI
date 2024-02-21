@@ -1,9 +1,11 @@
-from fp_arith import fp2_sub, fp2_add, fp2_copy, fp2_inv, fp2_issquare, fp2_mul, fp2_neg, fp2_sqr, fp2_squareroot, fp_add, fp_expon, fp_inv, fp_issquare, fp_mul, fp_neg, fp_sqr, fp_squareroot, fp_sub, update_p, reset_counter, small_nonsquare, small_square_with_minus_one_nonsquare, random_nonsquare
 
 ####################################################################################################################
 ################################## This file contains the functions needed to do  ##################################
 ##################################    x-only Montgomery Scalar Multiplication     ##################################
 ####################################################################################################################
+
+from fp_arith import fp2_sub, fp2_add, fp2_copy, fp2_inv, fp2_issquare, fp2_mul, fp2_neg, fp2_sqr, fp2_squareroot, fp_add, fp_expon, fp_inv, fp_issquare, fp_mul, fp_neg, fp_sqr, fp_squareroot, fp_sub, update_p, reset_counter, small_nonsquare, small_square_with_minus_one_nonsquare, random_nonsquare
+
 
 ##################
 # DOUBLING

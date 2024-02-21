@@ -207,8 +207,8 @@ def normalize_curve(oldProjA):
 	t2 = fp2_mul(t2, t1)
 	t1 = fp2_mul(t3, t1)
 
-	#choose some canonical solution
-	#here: smallest real part
+	# Choose some canonical solution
+	# Here: smallest real part
 	if t0[0] > t1[0] or (t0[0] == t1[0] and t0[1] > t1[1]):
 		t0 = fp2_copy(t1)
 	if t0[0] > t2[0] or (t0[0] == t2[0] and t0[1] > t2[1]):
@@ -317,7 +317,7 @@ def is_supersingular(ProjA):
 	A = proj_point_normalize(ProjA)
 	p = get_p()
 	for i in range(10):
-		x = [randint(0,p), 0]		#to avoid peaks bug
+		x = [randint(0,p), 0]
 		if not fp2_issquare(montgomery_rhs(x, A[0])):
 			continue
 

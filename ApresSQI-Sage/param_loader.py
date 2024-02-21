@@ -1,3 +1,11 @@
+
+###############################################################################################################
+##################         This file contain loads the parameters needed for a prime         ##################
+##################          These parameters should be precomputed and found in the          ##################
+################## sub-directory `Precomputed`, otherwise the function will output an error. ##################
+###############################################################################################################
+
+
 from sage.all import *
 from ast import literal_eval
 from xonly import xPoint
