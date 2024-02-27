@@ -2,7 +2,7 @@
 
 This repository contains the code related to the SQIsign signature scheme, using extension-fields in signing. This is code accompanying the paper *[AprèsSQI: Extra Fast Verification for SQIsign Using Extension-Field Signing](https://eprint.iacr.org/2023/1559)* by Maria Corte-Real Santos, Jonathan Komada Eriksen, Michael Meyer and Krijn Reijnders.
 
-All code in this repository was written in `Python` and [`SageMath`](https://www.sagemath.org/), and is made publically available under the MIT licence. The dependencies are:
+All code in this repository was written in `Python` and [`SageMath`](https://www.sagemath.org/), and is made publicly available under the MIT license. The dependencies are:
 - Python 3.11.1 (with matplotlib)
 - SageMath version 10.1
 
