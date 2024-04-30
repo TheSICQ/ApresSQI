@@ -151,3 +151,14 @@ For example, to benchmark the NIST version of SQIsign with 100 runs per prime, n
 ```bash
 python benchmark.py NIST 100
 ```
+
+## Licenses
+
+Code in this repository that does not indicate otherwise is published under the MIT license.
+
+For the third party code see their licenses:
+- [Deuring for the People](https://github.com/friends-of-quaternions/deuring): [https://github.com/friends-of-quaternions/deuring/blob/main/LICENSE.txt](https://github.com/friends-of-quaternions/deuring/blob/main/LICENSE.txt)
+- [LearningToSQI](https://github.com/LearningToSQI/SQISign-SageMath): [https://github.com/LearningToSQI/SQISign-SageMath/blob/main/LICENCE](https://github.com/LearningToSQI/SQISign-SageMath/blob/main/LICENCE)
+- [SageMath](https://github.com/sagemath/sage): [https://github.com/sagemath/sage?tab=License-1-ov-file](https://github.com/sagemath/sage?tab=License-1-ov-file)
+- [sibc](https://github.com/JJChiDguez/sibc): [https://github.com/JJChiDguez/sibc/blob/master/LICENSE](https://github.com/JJChiDguez/sibc/blob/master/LICENSE)
+- [SuperSolver](https://github.com/microsoft/SuperSolver): [https://github.com/microsoft/SuperSolver/blob/main/LICENSE](https://github.com/microsoft/SuperSolver/blob/main/LICENSE)
