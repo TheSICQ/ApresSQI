@@ -6,6 +6,34 @@ All code in this repository was written in `Python` and [`SageMath`](https://www
 - Python 3.11.1 (with matplotlib)
 - SageMath version 10.1
 
+## Instructions for Reproducing Results
+
+To reproduce ... from *[AprèsSQI: Extra Fast Verification for SQIsign Using Extension-Field Signing](https://eprint.iacr.org/2023/1559)*, do the following:
+- Table 1:
+```bash
+cd ApresSQI-Sage/
+sage benchmark.py
+```
+- Table 2:
+For benchmarking apres variants, run
+```bash
+cd BenchmarkVerification/Apres/
+python benchmark.py All 100 True
+```
+and for benchmarking NIST/LWXZ, run
+```bash
+cd BenchmarkVerification/NISTandLWXZ/
+python benchmark.py All 100 True
+```
+The results can then be found as
+```
+cat results_specific_version_[version].txt
+```
+where the output is of the form [(e, cost)], where e represents the 2-valuation of p+1.
+
+- Figures:
+Fig 2., 3. and 4. can be reproduced in a similar manner as table 2, but without the CLI-argument "True" at the end
+
 ## Contents
 
 This repository contains two main directories:
