@@ -365,7 +365,7 @@ if __name__ == "__main__":
     if variant == 'All':
         data = []
         for variant in ApresVariants:
-            data.append(benchmark_variant(variant, num_samples, plot = False, specific = specific))
+            data.append(benchmark_variant(variant, num_samples, plot = True, specific = specific))
         # plot(data)
     else:
-        benchmark_variant(variant, num_samples, plot = False, specific = specific)
+        benchmark_variant(variant, num_samples, plot = True, specific = specific)
