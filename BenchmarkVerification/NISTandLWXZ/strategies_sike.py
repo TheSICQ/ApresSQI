@@ -1,6 +1,8 @@
 ####################################################################################################################
 ################        This file contains functions to compute optimal strategies for isogenies      ##############
 ################           Code taken from SIBC,  implements the algorithm from the SIKE spec         ##############
+################                            SIBC is licensed under GNU GPLv3,                         ##############
+################                see https://github.com/JJChiDguez/sibc/blob/master/LICENSE            ##############
 ####################################################################################################################
 
 
