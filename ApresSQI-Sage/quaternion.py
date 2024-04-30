@@ -6,7 +6,7 @@
 
 from sage.all import *
 import fpylll
-from fpylll import IntegerMatrix, CVPd
+from fpylll import IntegerMatrix, CVP
 from fpylll.fplll.gso import MatGSO
 
 
