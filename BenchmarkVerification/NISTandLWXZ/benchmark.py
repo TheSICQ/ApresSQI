@@ -13,7 +13,7 @@ from mont_xonly import ladder_3pt
 from isogenychains import four_iso_chain_nist
 
 from copy import deepcopy
-# import matplotlib.pyplot as plt ## WARNING: Import if using plots
+import matplotlib.pyplot as plt ## Only needed for plots
 from math import ceil
 from random import randint
 import sys
@@ -187,4 +187,4 @@ if __name__ == "__main__":
             data.append(benchmark_variant(variant, num_samples, plot = True, specific = specific))
         # plot(data)
     else:
-        benchmark_variant(variant, num_samples, plot = False, specific = specific)
+        benchmark_variant(variant, num_samples, plot = True, specific = specific)
