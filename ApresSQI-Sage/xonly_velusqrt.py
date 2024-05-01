@@ -1,6 +1,13 @@
 """
 This file is for all intents and purposes as close to the original file in 
 the sagemath source code as possible, only adapted to accept x-only coordinates.
+
+####################################################################################################################
+################        This file is for all intents and purposes as close to the original file in    ##############
+################  the sagemath source code as possible, only adapted to accept x-only coordinates.    ##############
+################                            SageMath is licensed under GNU GPLv3,                     ##############
+################    see https://github.com/sagemath/sage/tree/master?tab=License-1-ov-file            ##############
+####################################################################################################################
 """
 
 from xonly import xPoint, xADD, xDBLMUL

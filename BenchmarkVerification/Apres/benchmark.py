@@ -14,7 +14,7 @@ from mont_xonly import ladder_3pt, xMULc, xMULaffs, xDBLe, xTPLe
 from isogenychains import four_iso_chain_opt, three_iso_chain_strategy
 
 from copy import deepcopy
-# import matplotlib.pyplot as plt ## WARNING: Import if using plots
+import matplotlib.pyplot as plt ## Only needed for plots
 from math import ceil
 from random import randint
 import sys
