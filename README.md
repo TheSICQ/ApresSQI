@@ -182,9 +182,12 @@ python benchmark.py NIST 100
 
 ## Licenses
 
-Code in this repository that does not indicate otherwise is published under the MIT license.
+The code in this repository is published under the MIT license, except for in the following files where the code is published under the GNU General Public License v3.0:
+- [ApresSQI-Sage/xonly_velusqrt.py](https://github.com/TheSICQ/ApresSQI/blob/main/ApresSQI-Sage/xonly_velusqrt.py)
+- [BenchmarkVerification/NISTandLWXZ/strategies_sike.py](https://github.com/TheSICQ/ApresSQI/blob/main/BenchmarkVerification/NISTandLWXZ/strategies_sike.py)
+- [BenchmarkVerification/Apres/strategies_sike.py](https://github.com/TheSICQ/ApresSQI/blob/main/BenchmarkVerification/Apres/strategies_sike.py)
 
-For the third party code see their licenses:
+In this repository, we have included third party code. Follow the links below to read their licenses in detail:
 - [Deuring for the People](https://github.com/friends-of-quaternions/deuring): [https://github.com/friends-of-quaternions/deuring/blob/main/LICENSE.txt](https://github.com/friends-of-quaternions/deuring/blob/main/LICENSE.txt)
 - [LearningToSQI](https://github.com/LearningToSQI/SQISign-SageMath): [https://github.com/LearningToSQI/SQISign-SageMath/blob/main/LICENCE](https://github.com/LearningToSQI/SQISign-SageMath/blob/main/LICENCE)
 - [SageMath](https://github.com/sagemath/sage): [https://github.com/sagemath/sage?tab=License-1-ov-file](https://github.com/sagemath/sage?tab=License-1-ov-file)
