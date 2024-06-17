@@ -23,7 +23,11 @@ SOFTWARE.
 
 =================================================================================
 
-SageMath and sibc are licensed under GNU GENERAL PUBLIC LICENSE Version 3.
+SageMath (used in ApresSQI-Sage/xonly_velusqrt.py) and sibc 
+(used in BenchmarkVerification/NISTandLWXZ/strategies_sike.py and 
+BenchmarkVerification/Apres/strategies_sike.py) are licensed under 
+GNU GENERAL PUBLIC LICENSE Version 3.
+
 The full text can be found below.
 
 =================================================================================
