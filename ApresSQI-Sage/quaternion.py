@@ -38,7 +38,9 @@ def solve_closest_vector_problem(lattice_basis, target):
     lattice basis and target vector
     """
     L = IntegerMatrix.from_matrix(lattice_basis.LLL())
+    print("HERE")
     v = CVP.closest_vector(L, target)
+    print("AFTER")
     # fpylll returns a type `tuple` object
     return vector(v)
 
@@ -121,7 +123,11 @@ def generate_close_vectors(lattice_basis, target, p, L, count=2000):
 
     short_vectors = generate_short_vectors(lattice_basis, bound, count=count)
 
+    counter = 0
     for v in short_vectors:
+        if counter > 100:
+            break
+        counter += 1
         yield closest + v
 
 

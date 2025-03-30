@@ -188,6 +188,47 @@ def test_xSqrtVelu():
 
     print("  > Success")
 
+def CGL_collision(param):    
+    params = SQIsign(param)    
+    
+    g = params.f
+
+    while g < 1024:
+        g += params.f
+
+    #gamma = FullRepresentInteger(params.O0, Integer(2)**(2*g))
+    i, j, k = params.B.gens()
+    gamma = -Integer(716699723090500146378365648476854567893141048600647231835968645114838313947539777283490639034351049315596689297466352028430557117882871659176647956068067651829181425340409180954406537963130503832225155132673823429361752561773661442340566883844329563438846929162058132940359899435753233377244054329264015876212204635201) + Integer(574404203146155031533094788205053116156580814071514608434543574548868243857511193455582660605175872467306345807348830847196027495297476129881395716644629191082940341344567411930012967182006312446898356713459483142574462106046407746776304408435032505742907387768224625329922927453621307044856820895301835394305133789095)/2*i - Integer(7)/2*j - Integer(7)*k
+    print(gamma)
+    J1 = params.O0*gamma + params.O0*Integer(2)**(g)
+    J2 = params.O0*gamma.conjugate() + params.O0*Integer(2)**(g)
+    Js = [J1, J2]
+
+    I_secret = RandomEquivalentPrimeIdeal(J1)
+    while I_secret.norm() % 4 != 3:
+        I_secret = RandomEquivalentPrimeIdeal(J1)
+    while len(Js) < 3:
+        print("Starting KLPT")
+        for tries in range(100):
+            print(f"try: {tries}")
+            alpha = KeyGenKLPT(params.O0, I_secret, params.f)
+            if alpha:
+                break
+        assert alpha in I_secret
+        J_secret = I_secret*(alpha.conjugate()/I_secret.norm())
+
+        assert all([l == 2 for l,e in factor(J_secret.norm())])
+        Js.append(J_secret)
+
+    for J_id in Js:
+        if J_id == J1 or J_id == J2:
+            continue
+        phi_Itau, zip, _ = IdealToIsogenyEichler(params.O0, params.O0_alt, J_id, params.O0*1, params.facToBasis, params.facToAction, params.B_2[0], params.f, params.T)
+        print("!!!!! PATH:")
+        for phi in phi_Itau.factors():
+            print(phi.degree(), phi.codomain().j_invariant())
+        print("  > Success")
+
 def all_tests(param):
     test_RepresentInteger(param)
     test_KeyGenKLPT(param)
@@ -201,15 +242,20 @@ def all_tests(param):
 
 if __name__=="__main__":
     #param = '4-block'
-    param = '7-block'
+    #param = '7-block'
     #param = 'NIST'
     #param = 'toy'
     #param = '136319'
     #param = '8513034219037441780170691209753296498696014329521974009944792576819199999999'
+    param = '73743043621499797449074820543863456997944695372324032511999999999999999999999'
     #test_KeyGen(param)
-    test_SigningAndVerif(param)
+    #test_SigningAndVerif(param)
     #test_SigningAndVerif(param, compressed=False)
     #test_SigningAndVerif(param, seeded=False)
     #all_tests(param)
     #test_xSqrtVelu()
+    #test_IdealToIsogenyEichler(param)
+    #test_KeyGen(param)
+    #test_Signing(param)
+    CGL_collision(param)
     print('All tests passed!')

@@ -32,9 +32,9 @@ def FullRepresentInteger(O0, M):
     p = B.ramified_primes()[0]
     sol = None
     for _ in range(1000):
-        m1 = max(floor(sqrt(round((4*M)/p, 5))), 100)
+        m1 = min(isqrt(round(min((4*M), p**2)/p, 5)), 100)
         z = randint(-m1, m1)
-        m2 = floor(sqrt(round((4*M-z**2)/p, 5)))
+        m2 = min(isqrt(round(min((4*M), p**2)/p, 5)), 100)
         w = randint(-m2, m2)
         Mm = 4*M - p*QF(z,w)
         x, y, found = Cornacchia(QF, Mm)
@@ -60,12 +60,12 @@ def EichlerModConstraint(I, gamma, delta, divisible=False):
     """
     B = I.quaternion_algebra()
     i,j,k = B.gens()
-    beta1, beta2, _, _ = I.gens() # Should already be in HNF form
+    beta1, beta2, _, _ = list(I.basis_matrix())
     if divisible:
-        M = Matrix(Integers(I.norm()), [(gamma*j*delta).coefficient_tuple(), (gamma*j*i*delta).coefficient_tuple(), beta1.coefficient_tuple(), beta2.coefficient_tuple()]).transpose()
+        M = Matrix(Integers(I.norm()), [(gamma*j*delta).coefficient_tuple(), (gamma*j*i*delta).coefficient_tuple(), beta1, beta2]).transpose()
         C, D, _, _ = M.right_kernel().basis()[0]
     else:
-        M = Matrix(Integers(I.norm()), [(gamma*j*delta).coefficient_tuple(), (gamma*j*i*delta).coefficient_tuple(), B(1).coefficient_tuple(), beta1.coefficient_tuple(), beta2.coefficient_tuple()]).transpose()
+        M = Matrix(Integers(I.norm()), [(gamma*j*delta).coefficient_tuple(), (gamma*j*i*delta).coefficient_tuple(), B(1).coefficient_tuple(), beta1, beta2]).transpose()
         C, D, _, _, _ = M.right_kernel().basis()[0]
     return ZZ(C), ZZ(D)
 
@@ -175,6 +175,8 @@ def KeyGenKLPT(O0, I, f):
     Z_N = Integers(N_I)
     low_k = ceil(log(p,2) - log(N_I, 2) + 1)
     log_output_norm = ceil((3*log(p,2)+15)/f)*f #The +15 is guesstimated
+    #while log_output_norm < 1025:
+    #    log_output_norm += f
     for k in range(low_k, low_k+10):
         N_gamma = ZZ(2)**(k)
         N_mu = ZZ(2)**ZZ(log_output_norm - k)

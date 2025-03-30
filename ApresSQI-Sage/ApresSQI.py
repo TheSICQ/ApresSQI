@@ -68,6 +68,7 @@ class SQIsign:
         print("KLPT done!")
         J_secret = I_secret*(alpha.conjugate()/D_secret)
         phi_secret, _, Q_2f = IdealToIsogenyEichler(self.O0, self.O0_alt, J_secret, self.O0*1, self.facToBasis, self.facToAction, self.B_2[0], self.f, self.T)
+
         E_A, phi_secret, Q_2f = Normalized(phi_secret, R = Q_2f)
         pushedFacToBasis = PushBasis(phi_secret, self.facToBasis)
         self.pk = SQIsign_pubkey(E_A)
