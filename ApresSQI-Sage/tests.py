@@ -221,8 +221,6 @@ def CGL_collision(param):
         Js.append(J_secret)
 
     for J_id in Js:
-        if J_id == J1 or J_id == J2:
-            continue
         phi_Itau, zip, _ = IdealToIsogenyEichler(params.O0, params.O0_alt, J_id, params.O0*1, params.facToBasis, params.facToAction, params.B_2[0], params.f, params.T)
         print("!!!!! PATH:")
         for phi in phi_Itau.factors():
